@@ -6,6 +6,11 @@ import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.TreeMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,16 +38,50 @@ public class FallasMonumentsJsonParser {
         try {
 
             // Convert JSON File to Java Object
+            logger.info("Reading data from " + ApplicationProperties.getStringProperty("dataset.url"));
             FallaMonumentsData fallaMonumentsData = gson.fromJson(readJsonFromUrl(ApplicationProperties.getStringProperty("dataset.url")), FallaMonumentsData.class);
-
-            logger.info("Number of Fallas: " + fallaMonumentsData.getFeatures().size());
+            logger.info("Total # of Fallas read: " + fallaMonumentsData.getFeatures().size());
             
             Iterator<Feature> FallaIterator = fallaMonumentsData.getFeatures().iterator();
+
+            Feature feature;
+            Map <String, HashMap<String, Feature>> unsortedMap = new HashMap<String, HashMap<String, Feature>>();
+            Map <String, HashMap<String, Feature>> sortedMap = new HashMap<String, HashMap<String, Feature>>();
+
+            logger.info("Sorting results by " + ApplicationProperties.getStringProperty("dataset.filter"));
             while(FallaIterator.hasNext()) {
-            	
-            	Feature feature = (Feature)FallaIterator.next();
-            	
-            	logger.info("Falla: " + feature.getProperties().getNombre() + " - Section: " + feature.getProperties().getSeccion());
+            	feature = (Feature)FallaIterator.next();
+              
+              if (("all").equals(ApplicationProperties.getStringProperty("dataset.filter"))) {
+                //unsortedMap.put(feature.getProperties().getNombre(), feature);
+                if (!unsortedMap.containsKey(feature.getProperties().getNombre())) {
+                  unsortedMap.put(feature.getProperties().getNombre(), new HashMap<String, Feature>());
+                }
+                unsortedMap.get(feature.getProperties().getNombre()).put(feature.getProperties().getNombre(), feature);
+              } else if (("section").equals(ApplicationProperties.getStringProperty("dataset.filter"))) {
+                if (!unsortedMap.containsKey(feature.getProperties().getSeccion())) {
+                  unsortedMap.put(feature.getProperties().getSeccion(), new HashMap<String, Feature>());
+                }
+                unsortedMap.get(feature.getProperties().getSeccion()).put(feature.getProperties().getNombre(), feature);
+              } else if (("section_i").equals(ApplicationProperties.getStringProperty("dataset.filter"))) {
+                if (!unsortedMap.containsKey(feature.getProperties().getSeccionI())) {
+                  unsortedMap.put(feature.getProperties().getSeccionI(), new HashMap<String, Feature>());
+                }
+                unsortedMap.get(feature.getProperties().getSeccionI()).put(feature.getProperties().getNombre(), feature);
+              } else {
+                logger.error("Filter criteria (" + ApplicationProperties.getStringProperty("dataset.filter") + ") invalid");
+              }
+            }
+            //logger.info("UnSorted: " + unsortedMap);
+            sortedMap = new TreeMap<String, HashMap<String, Feature>>(unsortedMap);
+            Map <String, Feature> sortedSelectedMap;
+
+            for (Map.Entry<String, HashMap<String, Feature>> entry : sortedMap.entrySet()) {
+              logger.info("- " + entry.getKey() + " -");
+              sortedSelectedMap = new TreeMap<String, Feature>(entry.getValue());
+              for (Map.Entry<String, Feature> entrySelected : sortedSelectedMap.entrySet()) {
+                logger.info("   > " + entrySelected.getKey());
+              }
             }
 
         } catch (IOException e) {

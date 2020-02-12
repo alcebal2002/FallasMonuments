@@ -7,8 +7,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.TreeMap;
 
@@ -64,10 +63,10 @@ public class FallasMonumentsJsonParser {
                 }
                 unsortedMap.get(feature.getProperties().getSeccion()).put(feature.getProperties().getNombre(), feature);
               } else if (("section_i").equals(ApplicationProperties.getStringProperty("dataset.filter"))) {
-                if (!unsortedMap.containsKey(feature.getProperties().getSeccionI())) {
-                  unsortedMap.put(feature.getProperties().getSeccionI(), new HashMap<String, Feature>());
+                if (!unsortedMap.containsKey(fillWithZeros(feature.getProperties().getSeccionI(),2))) {
+                  unsortedMap.put(fillWithZeros(feature.getProperties().getSeccionI(),2), new HashMap<String, Feature>());
                 }
-                unsortedMap.get(feature.getProperties().getSeccionI()).put(feature.getProperties().getNombre(), feature);
+                unsortedMap.get(fillWithZeros(feature.getProperties().getSeccionI(),2)).put(feature.getProperties().getNombre(), feature);
               } else {
                 logger.error("Filter criteria (" + ApplicationProperties.getStringProperty("dataset.filter") + ") invalid");
               }
@@ -108,4 +107,16 @@ public class FallasMonumentsJsonParser {
         return sb.toString();
       }
 
+      public static String fillWithZeros (String inputString, int length) {
+        if (inputString.length() >= length) {
+            return inputString;
+        }
+        StringBuilder sb = new StringBuilder();
+        while (sb.length() < length - inputString.length()) {
+            sb.append('0');
+        }
+        sb.append(inputString);
+     
+        return sb.toString();
+    }
 }

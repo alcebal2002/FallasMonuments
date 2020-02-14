@@ -5,10 +5,9 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
-import java.util.HashMap;
 import java.util.TreeMap;
 
 import org.slf4j.Logger;
@@ -25,7 +24,7 @@ public class FallasMonumentsJsonParser {
 	// Logger
 	private static Logger logger = LoggerFactory.getLogger(FallasMonumentsJsonParser.class);
   
-  public static void getListOfFallas() {
+  public static void getListOfFallas(final String filter) {
 
     logger.info("Application started");
     
@@ -47,28 +46,28 @@ public class FallasMonumentsJsonParser {
       Map <String, HashMap<String, Feature>> unsortedMap = new HashMap<String, HashMap<String, Feature>>();
       Map <String, HashMap<String, Feature>> sortedMap = new HashMap<String, HashMap<String, Feature>>();
 
-      logger.info("Sorting results by " + ApplicationProperties.getStringProperty("dataset.filter"));
+      logger.info("Sorting results by " + filter);
       while(FallaIterator.hasNext()) {
         feature = (Feature)FallaIterator.next();
 
-        if (("all").equals(ApplicationProperties.getStringProperty("dataset.filter"))) {
+        if (("all").equals(filter)) {
           //unsortedMap.put(feature.getProperties().getNombre(), feature);
           if (!unsortedMap.containsKey(feature.getProperties().getNombre())) {
             unsortedMap.put(feature.getProperties().getNombre(), new HashMap<String, Feature>());
           }
           unsortedMap.get(feature.getProperties().getNombre()).put(feature.getProperties().getNombre(), feature);
-        } else if (("section").equals(ApplicationProperties.getStringProperty("dataset.filter"))) {
+        } else if (("section").equals(filter)) {
           if (!unsortedMap.containsKey(feature.getProperties().getSeccion())) {
             unsortedMap.put(feature.getProperties().getSeccion(), new HashMap<String, Feature>());
           }
           unsortedMap.get(feature.getProperties().getSeccion()).put(feature.getProperties().getNombre(), feature);
-        } else if (("section_i").equals(ApplicationProperties.getStringProperty("dataset.filter"))) {
+        } else if (("section_i").equals(filter)) {
           if (!unsortedMap.containsKey(fillWithZeros(feature.getProperties().getSeccionI(),2))) {
             unsortedMap.put(fillWithZeros(feature.getProperties().getSeccionI(),2), new HashMap<String, Feature>());
           }
           unsortedMap.get(fillWithZeros(feature.getProperties().getSeccionI(),2)).put(feature.getProperties().getNombre(), feature);
         } else {
-          logger.error("Filter criteria (" + ApplicationProperties.getStringProperty("dataset.filter") + ") invalid");
+          logger.error("Filter criteria (" + filter + ") invalid");
         }
      }
     //logger.info("UnSorted: " + unsortedMap);

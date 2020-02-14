@@ -34,12 +34,43 @@ public class MainApp {
 		
 		get("/", (req, res) -> Constants.SPARK_WELCOME_MESSAGE);
         get("/stop", (req, res) -> halt(401, Constants.SPARK_BYE_MESSAGE));
-        get("/fallas2020", (req, res) -> {
+        get("/fallas2020All", (req, res) -> {
         	StringWriter writer = new StringWriter();
 
         	try {
-				
-				FallasMonumentsJsonParser.getListOfFallas();
+				FallasMonumentsJsonParser.getListOfFallas("all");
+/*
+        		Map<String, Object> root = new HashMap<String, Object>();
+        		root.put( "Key", "Value" );
+				Template resultTemplate = freemarkerConfig.getTemplate(ApplicationProperties.getStringProperty(Constants.SP_TEMPLATEFILENAME));
+				resultTemplate.process(root, writer);
+*/				
+    		} catch (Exception ex) {
+        		 logger.error ("Exception: " + ex.getClass() + " - " + ex.getMessage());
+        	}
+			return writer;
+        });
+        get("/fallas2020Seccion", (req, res) -> {
+        	StringWriter writer = new StringWriter();
+
+        	try {
+				FallasMonumentsJsonParser.getListOfFallas("section");
+/*
+        		Map<String, Object> root = new HashMap<String, Object>();
+        		root.put( "Key", "Value" );
+				Template resultTemplate = freemarkerConfig.getTemplate(ApplicationProperties.getStringProperty(Constants.SP_TEMPLATEFILENAME));
+				resultTemplate.process(root, writer);
+*/				
+    		} catch (Exception ex) {
+        		 logger.error ("Exception: " + ex.getClass() + " - " + ex.getMessage());
+        	}
+			return writer;
+        });
+        get("/fallas2020SeccionInfantil", (req, res) -> {
+        	StringWriter writer = new StringWriter();
+
+        	try {
+				FallasMonumentsJsonParser.getListOfFallas("section_i");
 /*
         		Map<String, Object> root = new HashMap<String, Object>();
         		root.put( "Key", "Value" );

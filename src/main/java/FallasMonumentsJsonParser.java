@@ -24,8 +24,10 @@ public class FallasMonumentsJsonParser {
 	// Logger
 	private static Logger logger = LoggerFactory.getLogger(FallasMonumentsJsonParser.class);
   
-  public static void getListOfFallas(final String filter) {
+  public static String getListOfFallas(final String filter) {
 
+    StringBuffer sbResult = new StringBuffer();
+    
     logger.info("Application started");
     
     // Load properties from file
@@ -76,14 +78,17 @@ public class FallasMonumentsJsonParser {
 
     for (Map.Entry<String, HashMap<String, Feature>> entry : sortedMap.entrySet()) {
       logger.info("- " + entry.getKey() + " -");
+      sbResult.append("- " + entry.getKey() + " -");
       sortedSelectedMap = new TreeMap<String, Feature>(entry.getValue());
       for (Map.Entry<String, Feature> entrySelected : sortedSelectedMap.entrySet()) {
         logger.info("   > " + entrySelected.getKey());
+        sbResult.append("   > " + entrySelected.getKey());
       }
     }
   } catch (IOException e) {
     e.printStackTrace();
   }
+  return sbResult.toString();
 }
 
 

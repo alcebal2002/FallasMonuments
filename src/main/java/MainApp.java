@@ -25,6 +25,8 @@ public class MainApp {
 
 	public static void main(String[] args) throws Exception {
 		
+		StringWriter writer = new StringWriter();
+		
 		logger.info("Starting SPARK REST Framework");
 
 		// Load properties from file
@@ -35,10 +37,9 @@ public class MainApp {
 		get("/", (req, res) -> Constants.SPARK_WELCOME_MESSAGE);
         get("/stop", (req, res) -> halt(401, Constants.SPARK_BYE_MESSAGE));
         get("/fallas2020All", (req, res) -> {
-        	StringWriter writer = new StringWriter();
 
-        	try {
-				FallasMonumentsJsonParser.getListOfFallas("all");
+			try {
+				writer.write(FallasMonumentsJsonParser.getListOfFallas("all"));
 /*
         		Map<String, Object> root = new HashMap<String, Object>();
         		root.put( "Key", "Value" );
@@ -51,10 +52,9 @@ public class MainApp {
 			return writer;
         });
         get("/fallas2020Seccion", (req, res) -> {
-        	StringWriter writer = new StringWriter();
 
         	try {
-				FallasMonumentsJsonParser.getListOfFallas("section");
+				writer.write(FallasMonumentsJsonParser.getListOfFallas("section"));
 /*
         		Map<String, Object> root = new HashMap<String, Object>();
         		root.put( "Key", "Value" );
@@ -67,10 +67,9 @@ public class MainApp {
 			return writer;
         });
         get("/fallas2020SeccionInfantil", (req, res) -> {
-        	StringWriter writer = new StringWriter();
 
         	try {
-				FallasMonumentsJsonParser.getListOfFallas("section_i");
+				writer.write(FallasMonumentsJsonParser.getListOfFallas("section_i"));
 /*
         		Map<String, Object> root = new HashMap<String, Object>();
         		root.put( "Key", "Value" );

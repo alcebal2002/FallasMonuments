@@ -38,6 +38,25 @@
 		</style>
     </head>
     <body>
+
+	<#if fallasMap??>
+		<div>
+		<ul>
+		<#list fallasMap?values as featureMap>
+			<#list featureMap?values as falla>
+			<li>
+				<h3>${falla.getProperties().getNombre()}</h3>
+				<p>${falla.getProperties().getSeccion()}</p>
+				<p>${falla.getProperties().getFallera()}</p>
+				<p>${falla.getProperties().getPresidente()}</p>
+			</li>			
+			</#list>
+		</#list>
+		</ul>
+		</div>
+	</#if>
+
+<!--
 		<div>
 		<ul>
 			<li>
@@ -65,5 +84,6 @@
 			</li>
 		</ul>
 		</div>
+-->
 	</body>
 </html>

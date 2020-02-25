@@ -25,8 +25,6 @@ public class MainApp {
 
 	public static void main(String[] args) throws Exception {
 		
-		StringWriter writer = new StringWriter();
-		
 		logger.info("Starting SPARK REST Framework");
 
 		// Load properties from file
@@ -36,14 +34,18 @@ public class MainApp {
 		Spark.staticFileLocation(ApplicationProperties.getStringProperty(Constants.SP_PUBLICPATH));
 		
 		Template resultTemplate = freemarkerConfig.getTemplate(ApplicationProperties.getStringProperty(Constants.SP_TEMPLATEFILENAME));
-		Map<String, Object> root = new HashMap<String, Object>();
+		
 
 		get("/", (req, res) -> Constants.SPARK_WELCOME_MESSAGE);
         get("/stop", (req, res) -> halt(401, Constants.SPARK_BYE_MESSAGE));
         get("/fallas2020All", (req, res) -> {
 
+			StringWriter writer = new StringWriter();
+			Map<String, Object> root = new HashMap<String, Object>();
+
 			try {
-				writer.write(FallasMonumentsJsonParser.getListOfFallas("all"));
+				root.put( "fallasMap", FallasMonumentsJsonParser.getListOfFallas("all"));
+//				writer.write(FallasMonumentsJsonParser.getListOfFallas("all"));
 				resultTemplate.process(root, writer);
 
 			} catch (Exception ex) {
@@ -53,8 +55,11 @@ public class MainApp {
         });
         get("/fallas2020Seccion", (req, res) -> {
 
+			StringWriter writer = new StringWriter();
+			Map<String, Object> root = new HashMap<String, Object>();
         	try {
-				writer.write(FallasMonumentsJsonParser.getListOfFallas("section"));
+				root.put( "fallasMap", FallasMonumentsJsonParser.getListOfFallas("section"));
+//				writer.write(FallasMonumentsJsonParser.getListOfFallas("section"));
 				resultTemplate.process(root, writer);
     		} catch (Exception ex) {
         		 logger.error ("Exception: " + ex.getClass() + " - " + ex.getMessage());
@@ -63,8 +68,12 @@ public class MainApp {
         });
         get("/fallas2020SeccionInfantil", (req, res) -> {
 
+			StringWriter writer = new StringWriter();
+			Map<String, Object> root = new HashMap<String, Object>();
+
         	try {
-				writer.write(FallasMonumentsJsonParser.getListOfFallas("section_i"));
+				root.put( "fallasMap", FallasMonumentsJsonParser.getListOfFallas("section_i"));
+//				writer.write(FallasMonumentsJsonParser.getListOfFallas("section_i"));
 				resultTemplate.process(root, writer);
     		} catch (Exception ex) {
         		 logger.error ("Exception: " + ex.getClass() + " - " + ex.getMessage());

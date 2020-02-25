@@ -24,10 +24,12 @@ public class FallasMonumentsJsonParser {
 	// Logger
 	private static Logger logger = LoggerFactory.getLogger(FallasMonumentsJsonParser.class);
   
-  public static String getListOfFallas(final String filter) {
+  public static Map <String, HashMap<String, Feature>> getListOfFallas(final String filter) {
 
-    StringBuffer sbResult = new StringBuffer();
-    
+    Map <String, Feature> sortedSelectedMap = null;
+    Map <String, HashMap<String, Feature>> unsortedMap = new HashMap<String, HashMap<String, Feature>>();
+    Map <String, HashMap<String, Feature>> sortedMap = null;
+
     logger.info("Application started");
     
     // Load properties from file
@@ -45,8 +47,6 @@ public class FallasMonumentsJsonParser {
       Iterator<Feature> FallaIterator = fallaMonumentsData.getFeatures().iterator();
 
       Feature feature;
-      Map <String, HashMap<String, Feature>> unsortedMap = new HashMap<String, HashMap<String, Feature>>();
-      Map <String, HashMap<String, Feature>> sortedMap = new HashMap<String, HashMap<String, Feature>>();
 
       logger.info("Sorting results by " + filter);
       while(FallaIterator.hasNext()) {
@@ -74,21 +74,23 @@ public class FallasMonumentsJsonParser {
      }
     //logger.info("UnSorted: " + unsortedMap);
     sortedMap = new TreeMap<String, HashMap<String, Feature>>(unsortedMap);
-    Map <String, Feature> sortedSelectedMap;
 
     for (Map.Entry<String, HashMap<String, Feature>> entry : sortedMap.entrySet()) {
       logger.info("- " + entry.getKey() + " -");
-      sbResult.append("- " + entry.getKey() + " -");
+      //sbResult.append("- " + entry.getKey() + " -");
       sortedSelectedMap = new TreeMap<String, Feature>(entry.getValue());
+      sortedMap.replace(entry.getKey(), entry.getValue());
+      /*
       for (Map.Entry<String, Feature> entrySelected : sortedSelectedMap.entrySet()) {
         logger.info("   > " + entrySelected.getKey());
         sbResult.append("   > " + entrySelected.getKey());
       }
+      */
     }
   } catch (IOException e) {
     e.printStackTrace();
   }
-  return sbResult.toString();
+  return sortedMap;
 }
 
 

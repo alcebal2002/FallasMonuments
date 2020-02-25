@@ -26,7 +26,7 @@ public class FallasMonumentsJsonParser {
   
   public static Map <String, HashMap<String, Feature>> getListOfFallas(final String filter) {
 
-    Map <String, Feature> sortedSelectedMap = null;
+    Map <String, Feature> sortedSelectedMap;
     Map <String, HashMap<String, Feature>> unsortedMap = new HashMap<String, HashMap<String, Feature>>();
     Map <String, HashMap<String, Feature>> sortedMap = null;
 

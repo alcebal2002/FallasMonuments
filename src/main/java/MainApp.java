@@ -32,21 +32,21 @@ public class MainApp {
 		// Load properties from file
 		ApplicationProperties.loadApplicationProperties ();
 		
+		freemarkerConfig.setClassForTemplateLoading(MainApp.class, ApplicationProperties.getStringProperty(Constants.SP_TEMPLATEPATH));
 		Spark.staticFileLocation(ApplicationProperties.getStringProperty(Constants.SP_PUBLICPATH));
 		
+		Template resultTemplate = freemarkerConfig.getTemplate(ApplicationProperties.getStringProperty(Constants.SP_TEMPLATEFILENAME));
+		Map<String, Object> root = new HashMap<String, Object>();
+
 		get("/", (req, res) -> Constants.SPARK_WELCOME_MESSAGE);
         get("/stop", (req, res) -> halt(401, Constants.SPARK_BYE_MESSAGE));
         get("/fallas2020All", (req, res) -> {
 
 			try {
 				writer.write(FallasMonumentsJsonParser.getListOfFallas("all"));
-/*
-        		Map<String, Object> root = new HashMap<String, Object>();
-        		root.put( "Key", "Value" );
-				Template resultTemplate = freemarkerConfig.getTemplate(ApplicationProperties.getStringProperty(Constants.SP_TEMPLATEFILENAME));
 				resultTemplate.process(root, writer);
-*/				
-    		} catch (Exception ex) {
+
+			} catch (Exception ex) {
         		 logger.error ("Exception: " + ex.getClass() + " - " + ex.getMessage());
         	}
 			return writer;
@@ -55,12 +55,7 @@ public class MainApp {
 
         	try {
 				writer.write(FallasMonumentsJsonParser.getListOfFallas("section"));
-/*
-        		Map<String, Object> root = new HashMap<String, Object>();
-        		root.put( "Key", "Value" );
-				Template resultTemplate = freemarkerConfig.getTemplate(ApplicationProperties.getStringProperty(Constants.SP_TEMPLATEFILENAME));
 				resultTemplate.process(root, writer);
-*/				
     		} catch (Exception ex) {
         		 logger.error ("Exception: " + ex.getClass() + " - " + ex.getMessage());
         	}
@@ -70,12 +65,7 @@ public class MainApp {
 
         	try {
 				writer.write(FallasMonumentsJsonParser.getListOfFallas("section_i"));
-/*
-        		Map<String, Object> root = new HashMap<String, Object>();
-        		root.put( "Key", "Value" );
-				Template resultTemplate = freemarkerConfig.getTemplate(ApplicationProperties.getStringProperty(Constants.SP_TEMPLATEFILENAME));
 				resultTemplate.process(root, writer);
-*/				
     		} catch (Exception ex) {
         		 logger.error ("Exception: " + ex.getClass() + " - " + ex.getMessage());
         	}

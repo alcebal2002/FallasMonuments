@@ -49,6 +49,12 @@
 				<p>${falla.getProperties().getSeccion()}</p>
 				<p>${falla.getProperties().getFallera()}</p>
 				<p>${falla.getProperties().getPresidente()}</p>
+				<p>${falla.getProperties().getArtista()}</p>
+				<p>${falla.getProperties().getLema()}</p>
+				<p>${falla.getProperties().getFalleraI()}</p>
+				<p>${falla.getProperties().getPresidenteI()}</p>
+				<p><a href="${falla.getProperties().getBoceto()}" target="_blank">Boceto</a></p>
+				<p><a href="${falla.getProperties().getBocetoI()}" target="_blank">Boceto Infantil</a></p>
 			</li>			
 			</#list>
 		</#list>

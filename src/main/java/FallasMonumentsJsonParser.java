@@ -26,7 +26,7 @@ public class FallasMonumentsJsonParser {
   
   public static Map <String, HashMap<String, Feature>> getListOfFallas(final String filter) {
 
-    Map <String, Feature> sortedSelectedMap;
+//    Map <String, Feature> sortedSelectedMap;
     Map <String, HashMap<String, Feature>> unsortedMap = new HashMap<String, HashMap<String, Feature>>();
     Map <String, HashMap<String, Feature>> sortedMap = null;
 
@@ -78,7 +78,7 @@ public class FallasMonumentsJsonParser {
     for (Map.Entry<String, HashMap<String, Feature>> entry : sortedMap.entrySet()) {
       logger.info("- " + entry.getKey() + " -");
       //sbResult.append("- " + entry.getKey() + " -");
-      sortedSelectedMap = new TreeMap<String, Feature>(entry.getValue());
+      //sortedSelectedMap = new TreeMap<String, Feature>(entry.getValue());
       sortedMap.replace(entry.getKey(), entry.getValue());
       /*
       for (Map.Entry<String, Feature> entrySelected : sortedSelectedMap.entrySet()) {

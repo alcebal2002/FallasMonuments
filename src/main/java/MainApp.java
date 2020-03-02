@@ -38,51 +38,20 @@ public class MainApp {
 
 		get("/", (req, res) -> Constants.SPARK_WELCOME_MESSAGE);
         get("/stop", (req, res) -> halt(401, Constants.SPARK_BYE_MESSAGE));
-        get("/fallas2020All", (req, res) -> {
+        get("/fallas2020", (req, res) -> {
 
 			StringWriter writer = new StringWriter();
 			Map<String, Object> root = new HashMap<String, Object>();
 
-			logger.info("Search param: " + req.queryParams("inicial"));
+			logger.info("Search orden: " + req.queryParams("orden"));
+			logger.info("Search parametro: " + req.queryParams("parametro"));
 
 			try {
-				root.put( "fallasMap", FallasMonumentsJsonParser.getListOfFallas("all", req.queryParams("inicial")!=null?req.queryParams("inicial"):null));
-//				writer.write(FallasMonumentsJsonParser.getListOfFallas("all"));
+				root.put( "fallasMap", FallasMonumentsJsonParser.getListOfFallas(req.queryParams("orden")!=null?req.queryParams("orden"):null,
+																				 req.queryParams("parametro")!=null?req.queryParams("parametro"):null));
 				resultTemplate.process(root, writer);
 
 			} catch (Exception ex) {
-        		 logger.error ("Exception: " + ex.getClass() + " - " + ex.getMessage());
-        	}
-			return writer;
-        });
-        get("/fallas2020Seccion", (req, res) -> {
-
-			StringWriter writer = new StringWriter();
-			Map<String, Object> root = new HashMap<String, Object>();
-
-			logger.info("Search param: " + req.queryParams("seccion"));
-
-        	try {
-				root.put( "fallasMap", FallasMonumentsJsonParser.getListOfFallas("section", req.queryParams("seccion")!=null?req.queryParams("seccion"):null));
-//				writer.write(FallasMonumentsJsonParser.getListOfFallas("section"));
-				resultTemplate.process(root, writer);
-    		} catch (Exception ex) {
-        		 logger.error ("Exception: " + ex.getClass() + " - " + ex.getMessage());
-        	}
-			return writer;
-        });
-        get("/fallas2020SeccionInfantil", (req, res) -> {
-
-			StringWriter writer = new StringWriter();
-			Map<String, Object> root = new HashMap<String, Object>();
-
-			logger.info("Search param: " + req.queryParams("seccion"));
-
-        	try {
-				root.put( "fallasMap", FallasMonumentsJsonParser.getListOfFallas("section_i", req.queryParams("seccion")!=null?req.queryParams("seccion"):null));
-//				writer.write(FallasMonumentsJsonParser.getListOfFallas("section_i"));
-				resultTemplate.process(root, writer);
-    		} catch (Exception ex) {
         		 logger.error ("Exception: " + ex.getClass() + " - " + ex.getMessage());
         	}
 			return writer;

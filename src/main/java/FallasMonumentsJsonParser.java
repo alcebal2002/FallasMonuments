@@ -24,7 +24,7 @@ public class FallasMonumentsJsonParser {
 	// Logger
 	private static Logger logger = LoggerFactory.getLogger(FallasMonumentsJsonParser.class);
   
-  public static Map <String, HashMap<String, Feature>> getListOfFallas(final String filter, final String urlParameter) {
+  public static Map <String, HashMap<String, Feature>> getListOfFallas(final String urlOrder, final String urlParameter) {
 
 //    Map <String, Feature> sortedSelectedMap;
     Map <String, HashMap<String, Feature>> unsortedMap = new HashMap<String, HashMap<String, Feature>>();
@@ -48,32 +48,35 @@ public class FallasMonumentsJsonParser {
 
       Feature feature;
 
-      logger.info("Sorting results by " + filter + " and parameter " + urlParameter);
+      logger.info("Results order by " + urlOrder + " with parameter " + urlParameter);
 
-      while(FallaIterator.hasNext()) {
-        feature = (Feature)FallaIterator.next();
-
-        logger.info("Seccion: " + feature.getProperties().getSeccion());
-
-        if (checkFilter(filter, urlParameter, feature)) {
-          if (("all").equals(filter)) {
-            if (!unsortedMap.containsKey(feature.getProperties().getNombre())) {
-              unsortedMap.put(feature.getProperties().getNombre(), new HashMap<String, Feature>());
+      if (checkFilter(urlOrder, urlParameter, null)) {
+        while(FallaIterator.hasNext()) {
+          feature = (Feature)FallaIterator.next();
+  
+          if (checkFilter(urlOrder, urlParameter, feature)) {
+            if (("nombre").equals(urlOrder.toLowerCase())) {
+              if (!unsortedMap.containsKey(feature.getProperties().getNombre())) {
+                unsortedMap.put(feature.getProperties().getNombre(), new HashMap<String, Feature>());
+              }
+              unsortedMap.get(feature.getProperties().getNombre()).put(feature.getProperties().getNombre(), feature);
+            } else if (("seccion").equals(urlOrder.toLowerCase())) {
+              if (!unsortedMap.containsKey(feature.getProperties().getSeccion())) {
+                unsortedMap.put(feature.getProperties().getSeccion(), new HashMap<String, Feature>());
+              }
+              unsortedMap.get(feature.getProperties().getSeccion()).put(feature.getProperties().getNombre(), feature);
+            } else if (("seccion_infantil").equals(urlOrder.toLowerCase())) {
+              if (!unsortedMap.containsKey(fillWithZeros(feature.getProperties().getSeccionI(),2))) {
+                unsortedMap.put(fillWithZeros(feature.getProperties().getSeccionI(),2), new HashMap<String, Feature>());
+              }
+              unsortedMap.get(fillWithZeros(feature.getProperties().getSeccionI(),2)).put(feature.getProperties().getNombre(), feature);
             }
-            unsortedMap.get(feature.getProperties().getNombre()).put(feature.getProperties().getNombre(), feature);
-          } else if (("section").equals(filter)) {
-            if (!unsortedMap.containsKey(feature.getProperties().getSeccion())) {
-              unsortedMap.put(feature.getProperties().getSeccion(), new HashMap<String, Feature>());
-            }
-            unsortedMap.get(feature.getProperties().getSeccion()).put(feature.getProperties().getNombre(), feature);
-          } else if (("section_i").equals(filter)) {
-            if (!unsortedMap.containsKey(fillWithZeros(feature.getProperties().getSeccionI(),2))) {
-              unsortedMap.put(fillWithZeros(feature.getProperties().getSeccionI(),2), new HashMap<String, Feature>());
-            }
-            unsortedMap.get(fillWithZeros(feature.getProperties().getSeccionI(),2)).put(feature.getProperties().getNombre(), feature);
           }
         }
-     }
+      } else {
+        logger.error ("Malformed URL. orden parameter is mandatory and should be valid (nombre, seccion, seccion_infantil)");
+      }
+
     sortedMap = new TreeMap<String, HashMap<String, Feature>>(unsortedMap);
 
     for (Map.Entry<String, HashMap<String, Feature>> entry : sortedMap.entrySet()) {
@@ -87,18 +90,25 @@ public class FallasMonumentsJsonParser {
   return sortedMap;
 }
 
-public static boolean checkFilter (final String filter, final String urlParam, final Feature feature) {
+public static boolean checkFilter (final String urlOrder, final String urlParam, final Feature feature) {
 
   boolean result = false;
 
-  if ((urlParam == null) ||
-      ((urlParam != null) && (
-        ((("all").equals(filter)) && (feature.getProperties().getNombre() != null) && ((feature.getProperties().getNombre()).startsWith(urlParam))) ||
-        ((("section").equals(filter)) && (feature.getProperties().getSeccion() != null) && ((feature.getProperties().getSeccion()).startsWith(urlParam))) ||
-        ((("section_i").equals(filter)) && (feature.getProperties().getSeccionI() != null) && ((feature.getProperties().getSeccionI()).startsWith(urlParam)))
-      ))
-    ) {
+  if (feature == null) {
+    if (urlOrder != null && ("nombre".equals(urlOrder) || "seccion".equals(urlOrder) || "seccion_infantil".equals(urlOrder))) {
       result = true;
+    }
+
+  } else {
+    if ((urlParam == null) ||
+        ((urlParam != null) && (
+          ((("nombre").equals(urlOrder.toLowerCase())) && (feature.getProperties().getNombre() != null) && ((feature.getProperties().getNombre().toLowerCase()).contains(urlParam.toLowerCase()))) ||
+          ((("seccion").equals(urlOrder.toLowerCase())) && (feature.getProperties().getSeccion() != null) && ((feature.getProperties().getSeccion().toLowerCase()).contains(urlParam.toLowerCase()))) ||
+          ((("seccion_infantil").equals(urlOrder.toLowerCase())) && (feature.getProperties().getSeccionI() != null) && ((feature.getProperties().getSeccionI().toLowerCase()).contains(urlParam.toLowerCase())))
+        ))
+      ) {
+        result = true;
+      }
     }
     return result;
   }

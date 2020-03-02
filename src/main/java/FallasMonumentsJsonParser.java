@@ -94,11 +94,14 @@ public static boolean checkFilter (final String urlOrder, final String urlParam,
 
   boolean result = false;
 
+  // No feature means the checkFilter is just to check valid orden parameter is passed
   if (feature == null) {
     if (urlOrder != null && ("nombre".equals(urlOrder) || "seccion".equals(urlOrder) || "seccion_infantil".equals(urlOrder))) {
       result = true;
     }
-
+  
+    // If feature is passed, it means the checkFilter has to validate all the possible combinations
+    // A valid orden parameter has to be present
   } else {
     if ((urlParam == null) ||
         ((urlParam != null) && (

@@ -43,6 +43,8 @@ public class MainApp {
 			StringWriter writer = new StringWriter();
 			Map<String, Object> root = new HashMap<String, Object>();
 
+			logger.info("Search param: " + req.queryParams("inicial"));
+
 			try {
 				root.put( "fallasMap", FallasMonumentsJsonParser.getListOfFallas("all", req.queryParams("inicial")!=null?req.queryParams("inicial"):null));
 //				writer.write(FallasMonumentsJsonParser.getListOfFallas("all"));
@@ -58,7 +60,7 @@ public class MainApp {
 			StringWriter writer = new StringWriter();
 			Map<String, Object> root = new HashMap<String, Object>();
 
-			logger.info("Seccion param: " + req.queryParams("seccion"));
+			logger.info("Search param: " + req.queryParams("seccion"));
 
         	try {
 				root.put( "fallasMap", FallasMonumentsJsonParser.getListOfFallas("section", req.queryParams("seccion")!=null?req.queryParams("seccion"):null));
@@ -73,6 +75,8 @@ public class MainApp {
 
 			StringWriter writer = new StringWriter();
 			Map<String, Object> root = new HashMap<String, Object>();
+
+			logger.info("Search param: " + req.queryParams("seccion"));
 
         	try {
 				root.put( "fallasMap", FallasMonumentsJsonParser.getListOfFallas("section_i", req.queryParams("seccion")!=null?req.queryParams("seccion"):null));

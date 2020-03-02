@@ -51,6 +51,8 @@
 				<p>${falla.getProperties().getPresidente()}</p>
 				<p>${falla.getProperties().getArtista()}</p>
 				<p>${falla.getProperties().getLema()}</p>
+				<p>--------------------------------</p>
+				<p>${falla.getProperties().getSeccionI()}</p>
 				<p>${falla.getProperties().getFalleraI()}</p>
 				<p>${falla.getProperties().getPresidenteI()}</p>
 				<p><a href="${falla.getProperties().getBoceto()}" target="_blank"><img src="${falla.getProperties().getBoceto()}" height="240" width="175"></a>&nbsp;<a href="${falla.getProperties().getBocetoI()}" target="_blank"><img src="${falla.getProperties().getBocetoI()}" height="240" width="175"></a></p>

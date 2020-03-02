@@ -55,46 +55,30 @@ public class FallasMonumentsJsonParser {
 
         logger.info("Seccion: " + feature.getProperties().getSeccion());
 
-        if (checkFilter(filter, feature)) {
-
-        }
-
-        if (("all").equals(filter)) {
-          //unsortedMap.put(feature.getProperties().getNombre(), feature);
-          if (!unsortedMap.containsKey(feature.getProperties().getNombre())) {
-            unsortedMap.put(feature.getProperties().getNombre(), new HashMap<String, Feature>());
-          }
-          unsortedMap.get(feature.getProperties().getNombre()).put(feature.getProperties().getNombre(), feature);
-        } else if (("section").equals(filter)) {
-          if ((urlParameter == null || ((urlParameter != null) && (feature.getProperties().getSeccion() != null) && ((feature.getProperties().getSeccion()).startsWith(urlParameter))))) {
+        if (checkFilter(filter, urlParameter, feature)) {
+          if (("all").equals(filter)) {
+            if (!unsortedMap.containsKey(feature.getProperties().getNombre())) {
+              unsortedMap.put(feature.getProperties().getNombre(), new HashMap<String, Feature>());
+            }
+            unsortedMap.get(feature.getProperties().getNombre()).put(feature.getProperties().getNombre(), feature);
+          } else if (("section").equals(filter)) {
             if (!unsortedMap.containsKey(feature.getProperties().getSeccion())) {
               unsortedMap.put(feature.getProperties().getSeccion(), new HashMap<String, Feature>());
             }
             unsortedMap.get(feature.getProperties().getSeccion()).put(feature.getProperties().getNombre(), feature);
+          } else if (("section_i").equals(filter)) {
+            if (!unsortedMap.containsKey(fillWithZeros(feature.getProperties().getSeccionI(),2))) {
+              unsortedMap.put(fillWithZeros(feature.getProperties().getSeccionI(),2), new HashMap<String, Feature>());
+            }
+            unsortedMap.get(fillWithZeros(feature.getProperties().getSeccionI(),2)).put(feature.getProperties().getNombre(), feature);
           }
-        } else if (("section_i").equals(filter)) {
-          if (!unsortedMap.containsKey(fillWithZeros(feature.getProperties().getSeccionI(),2))) {
-            unsortedMap.put(fillWithZeros(feature.getProperties().getSeccionI(),2), new HashMap<String, Feature>());
-          }
-          unsortedMap.get(fillWithZeros(feature.getProperties().getSeccionI(),2)).put(feature.getProperties().getNombre(), feature);
-        } else {
-          logger.error("Filter criteria (" + filter + ") invalid");
         }
      }
-    logger.info("UnSorted: " + unsortedMap);
     sortedMap = new TreeMap<String, HashMap<String, Feature>>(unsortedMap);
 
     for (Map.Entry<String, HashMap<String, Feature>> entry : sortedMap.entrySet()) {
       logger.info("- " + entry.getKey() + " -");
-      //sbResult.append("- " + entry.getKey() + " -");
-      //sortedSelectedMap = new TreeMap<String, Feature>(entry.getValue());
       sortedMap.replace(entry.getKey(), entry.getValue());
-      /*
-      for (Map.Entry<String, Feature> entrySelected : sortedSelectedMap.entrySet()) {
-        logger.info("   > " + entrySelected.getKey());
-        sbResult.append("   > " + entrySelected.getKey());
-      }
-      */
     }
   } catch (Exception e) {
     logger.error("Exception: " + e.getClass() + " - " + e.getMessage());
@@ -103,21 +87,21 @@ public class FallasMonumentsJsonParser {
   return sortedMap;
 }
 
-public static boolean checkFilter (final String filter, final Feature feature) {
+public static boolean checkFilter (final String filter, final String urlParam, final Feature feature) {
 
   boolean result = false;
 
-  if (("all").equals(filter)) {
-  } else if (("section").equals(filter)) {
-    if ((urlParameter == null || ((urlParameter != null) && (feature.getProperties().getSeccion() != null) && ((feature.getProperties().getSeccion()).startsWith(urlParameter))))) {
-      if (!unsortedMap.containsKey(feature.getProperties().getSeccion())) {
-        unsortedMap.put(feature.getProperties().getSeccion(), new HashMap<String, Feature>());
-      }
-      unsortedMap.get(feature.getProperties().getSeccion()).put(feature.getProperties().getNombre(), feature);
+  if ((urlParam == null) ||
+      ((urlParam != null) && (
+        ((("all").equals(filter)) && (feature.getProperties().getNombre() != null) && ((feature.getProperties().getNombre()).startsWith(urlParam))) ||
+        ((("section").equals(filter)) && (feature.getProperties().getSeccion() != null) && ((feature.getProperties().getSeccion()).startsWith(urlParam))) ||
+        ((("section_i").equals(filter)) && (feature.getProperties().getSeccionI() != null) && ((feature.getProperties().getSeccionI()).startsWith(urlParam)))
+      ))
+    ) {
+      result = true;
     }
-  } else if (("section_i").equals(filter)) {
+    return result;
   }
-}
 
 
 public static String readJsonFromUrl(String url) throws IOException {

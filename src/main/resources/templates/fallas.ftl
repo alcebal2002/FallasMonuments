@@ -45,7 +45,7 @@
 		<#list fallasMap?values as featureMap>
 			<#list featureMap?values as falla>
 			<li>
-				<h3>${falla.getProperties().getNombre()}</h3>
+				<p><h3>${falla.getProperties().getNombre()}</h3></p>
 				<p>${falla.getProperties().getSeccion()}</p>
 				<p>${falla.getProperties().getFallera()}</p>
 				<p>${falla.getProperties().getPresidente()}</p>
@@ -53,8 +53,7 @@
 				<p>${falla.getProperties().getLema()}</p>
 				<p>${falla.getProperties().getFalleraI()}</p>
 				<p>${falla.getProperties().getPresidenteI()}</p>
-				<p><a href="${falla.getProperties().getBoceto()}" target="_blank"><img src="${falla.getProperties().getBoceto()}" height="240" width="175"></a></p>
-				<p><a href="${falla.getProperties().getBocetoI()}" target="_blank"><img src="${falla.getProperties().getBocetoI()}" height="240" width="175"></a></p>
+				<p><a href="${falla.getProperties().getBoceto()}" target="_blank"><img src="${falla.getProperties().getBoceto()}" height="240" width="175"></a>&nbsp;<a href="${falla.getProperties().getBocetoI()}" target="_blank"><img src="${falla.getProperties().getBocetoI()}" height="240" width="175"></a></p>
 			</li>			
 			</#list>
 		</#list>

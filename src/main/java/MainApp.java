@@ -44,7 +44,7 @@ public class MainApp {
 			Map<String, Object> root = new HashMap<String, Object>();
 
 			try {
-				root.put( "fallasMap", FallasMonumentsJsonParser.getListOfFallas("all"));
+				root.put( "fallasMap", FallasMonumentsJsonParser.getListOfFallas("all", req.queryParams("inicial")!=null?req.queryParams("inicial"):null));
 //				writer.write(FallasMonumentsJsonParser.getListOfFallas("all"));
 				resultTemplate.process(root, writer);
 
@@ -57,8 +57,11 @@ public class MainApp {
 
 			StringWriter writer = new StringWriter();
 			Map<String, Object> root = new HashMap<String, Object>();
+
+			logger.info("Seccion param: " + req.queryParams("seccion"));
+
         	try {
-				root.put( "fallasMap", FallasMonumentsJsonParser.getListOfFallas("section"));
+				root.put( "fallasMap", FallasMonumentsJsonParser.getListOfFallas("section", req.queryParams("seccion")!=null?req.queryParams("seccion"):null));
 //				writer.write(FallasMonumentsJsonParser.getListOfFallas("section"));
 				resultTemplate.process(root, writer);
     		} catch (Exception ex) {
@@ -72,7 +75,7 @@ public class MainApp {
 			Map<String, Object> root = new HashMap<String, Object>();
 
         	try {
-				root.put( "fallasMap", FallasMonumentsJsonParser.getListOfFallas("section_i"));
+				root.put( "fallasMap", FallasMonumentsJsonParser.getListOfFallas("section_i", req.queryParams("seccion")!=null?req.queryParams("seccion"):null));
 //				writer.write(FallasMonumentsJsonParser.getListOfFallas("section_i"));
 				resultTemplate.process(root, writer);
     		} catch (Exception ex) {

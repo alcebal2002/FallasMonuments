@@ -53,8 +53,8 @@
 				<p>${falla.getProperties().getLema()}</p>
 				<p>${falla.getProperties().getFalleraI()}</p>
 				<p>${falla.getProperties().getPresidenteI()}</p>
-				<p><a href="${falla.getProperties().getBoceto()}" target="_blank">Boceto</a></p>
-				<p><a href="${falla.getProperties().getBocetoI()}" target="_blank">Boceto Infantil</a></p>
+				<p><a href="${falla.getProperties().getBoceto()}" target="_blank"><img src="${falla.getProperties().getBoceto()}" height="240" width="175"></a></p>
+				<p><a href="${falla.getProperties().getBocetoI()}" target="_blank"><img src="${falla.getProperties().getBocetoI()}" height="240" width="175"></a></p>
 			</li>			
 			</#list>
 		</#list>

@@ -1,6 +1,13 @@
 <html>
     <head>
+		<meta charset="UTF-8">
         <title>Fallas 2020</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="css/normalize.css">
+		<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.min.css'>
+		<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.4.0/animate.min.css'>
+		<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css'>
+		<link rel="stylesheet" href="css/style.css">
 		<style>
 			* {margin: 0; padding: 0;}
 			
@@ -38,12 +45,35 @@
 		</style>
     </head>
     <body>
-
 	<#if fallasMap??>
 		<div>
 		<ul>
 		<#list fallasMap?values as featureMap>
 			<#list featureMap?values as falla>
+
+		<div class="container m-t-md">
+			<!-- First row -->
+			<div class="row">
+				<div class="col-xs-12 col-md-4">
+				<!-- Card -->
+				<article class="card">
+					<a href="${falla.getProperties().getBoceto()}" target="_blank"><img src="${falla.getProperties().getBoceto()}" height="240" width="175"></a>&nbsp;<a href="${falla.getProperties().getBocetoI()}" target="_blank"><img src="${falla.getProperties().getBocetoI()}" height="240" width="175"></a>
+					<div class="card-block">
+					<h4 class="card-title">${falla.getProperties().getNombre()}</h4>
+					<h6 class="text-muted">George Orwell</h6>
+					<h6 class="text-muted">Nombre<p class="card-text">Nombre Falla</p></h6>
+					<a href="#" class="btn btn-primary">Read more</a>
+					</div>
+				</article><!-- .end Card -->
+				</div>
+			</div><!-- .end First row -->
+		</div>
+
+
+
+
+
+
 			<li>
 				<p><h3>${falla.getProperties().getNombre()}</h3></p>
 				<p>${falla.getProperties().getSeccion()}</p>

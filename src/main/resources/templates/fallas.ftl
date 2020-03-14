@@ -10,6 +10,11 @@
 		<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css'>
 	    <link rel="stylesheet" href="/fallas-cards/css/style.css">
 
+		<link rel="stylesheet" media="all" href="https://s3.amazonaws.com/dynatable-docs-assets/css/bootstrap-2.3.2.min.css" />
+		<link rel="stylesheet" media="all" href="https://s3.amazonaws.com/dynatable-docs-assets/css/jquery.dynatable.css" />
+		<script type="text/javascript" src="https://s3.amazonaws.com/dynatable-docs-assets/js/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="https://s3.amazonaws.com/dynatable-docs-assets/js/jquery.dynatable.js"></script>
+
 		<title>Fallas 2020</title>
     </head>
     <body>
@@ -79,5 +84,38 @@
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	
+	<table id="my-final-table" class="table table-bordered">
+		<thead>
+			<th>Type</th>
+			<th>Crs</th>
+		</thead>
+		<tbody></tbody>
+	</table>
+
+	<input type="hidden" id="jsonData" value=${jsonData}>
+
+	<script>
+		(function() {
+		var myRecords = JSON.parse(document.getElementById("jsonData").value);
+		var dynatable = $('#my-final-table').dynatable({
+			dataset: {
+			records: myRecords
+			}
+		}).data('dynatable');
+
+		$records.bind('input', function() {
+			try {
+			var json = JSON.parse($(this).text());
+			$records.removeClass('error');
+
+			dynatable.settings.dataset.originalRecords = json;
+			dynatable.process();
+			} catch(e) {
+			$records.addClass('error');
+			}
+		});
+		})();
+	</script>
 	</body>
 </html>

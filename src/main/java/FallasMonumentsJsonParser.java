@@ -24,12 +24,25 @@ public class FallasMonumentsJsonParser {
 	// Logger
 	private static Logger logger = LoggerFactory.getLogger(FallasMonumentsJsonParser.class);
   
-  public static Map <String, HashMap<String, Feature>> getListOfFallas(final String urlOrder, final String urlParameter) {
+  public static String getJsonData () {
+
+    String result = null;
+    
+    logger.info("Getting Json data");
+    try {
+      result = readJsonFromUrl(ApplicationProperties.getStringProperty("dataset.url"));
+    } catch (Exception e) {
+      logger.error("Exception: " + e.getClass() + " - " + e.getMessage());
+    }
+    return result;
+}
+
+public static Map <String, HashMap<String, Feature>> getListOfFallas(final String urlOrder, final String urlParameter) {
 
     Map <String, HashMap<String, Feature>> unsortedMap = new HashMap<String, HashMap<String, Feature>>();
     Map <String, HashMap<String, Feature>> sortedMap = null;
 
-    logger.info("Application started");
+    logger.info("Getting List of Fallas with Parameters ["+urlOrder+", "+ urlParameter+"]");
     
     // Load properties from file
     ApplicationProperties.loadApplicationProperties ();

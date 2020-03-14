@@ -49,12 +49,14 @@ public class MainApp {
 			try {
 				root.put( "fallasMap", FallasMonumentsJsonParser.getListOfFallas(req.queryParams("orden")!=null?req.queryParams("orden"):null,
 																				 req.queryParams("parametro")!=null?req.queryParams("parametro"):null));
+				root.put( "jsonData", FallasMonumentsJsonParser.getJsonData());
+																		 
 				resultTemplate.process(root, writer);
 
 			} catch (Exception ex) {
         		 logger.error ("Exception: " + ex.getClass() + " - " + ex.getMessage());
         	}
 			return writer;
-        });
+		});
     }
 }

@@ -71,8 +71,8 @@ public class ApplicationProperties {
     }
     
     public static String getProperty (final String propertyName) {
-
-       return applicationProperties.getProperty(propertyName);
+        if (applicationProperties == null) loadApplicationProperties();
+        return applicationProperties.getProperty(propertyName);
     }
     
     public static String printProperties () {

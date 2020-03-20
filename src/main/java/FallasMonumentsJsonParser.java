@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import model.FallaMonumentsData;
 import model.Feature;
 import utils.ApplicationProperties;
+import utils.Constants;
 
 public class FallasMonumentsJsonParser {
 	
@@ -28,9 +29,10 @@ public class FallasMonumentsJsonParser {
 
     String result = null;
     
-    logger.info("Getting Json data");
     try {
-      result = readJsonFromUrl(ApplicationProperties.getStringProperty("dataset.url"));
+      logger.info("Reading data from " + ApplicationProperties.getStringProperty(Constants.DATASET_URL));
+      result = readJsonFromUrl(ApplicationProperties.getStringProperty(Constants.DATASET_URL));
+      logger.info("Reading data from " + ApplicationProperties.getStringProperty(Constants.DATASET_URL) + " done");
     } catch (Exception e) {
       logger.error("Exception: " + e.getClass() + " - " + e.getMessage());
     }
@@ -52,8 +54,7 @@ public static Map <String, HashMap<String, Feature>> getListOfFallas(final Strin
     try {
 
       // Convert JSON File to Java Object
-      logger.info("Reading data from " + ApplicationProperties.getStringProperty("dataset.url"));
-      FallaMonumentsData fallaMonumentsData = gson.fromJson(readJsonFromUrl(ApplicationProperties.getStringProperty("dataset.url")), FallaMonumentsData.class);
+      FallaMonumentsData fallaMonumentsData = gson.fromJson(getJsonData(), FallaMonumentsData.class);
       logger.info("Total # of Fallas read: " + fallaMonumentsData.getFeatures().size());
 
       Iterator<Feature> FallaIterator = fallaMonumentsData.getFeatures().iterator();
@@ -67,17 +68,17 @@ public static Map <String, HashMap<String, Feature>> getListOfFallas(final Strin
           feature = (Feature)FallaIterator.next();
   
           if (checkFilter(urlOrder, urlParameter, feature)) {
-            if (("nombre").equals(urlOrder.toLowerCase())) {
+            if ((Constants.DATASET_NOMBRE).equals(urlOrder.toLowerCase())) {
               if (!unsortedMap.containsKey(feature.getProperties().getNombre())) {
                 unsortedMap.put(feature.getProperties().getNombre(), new HashMap<String, Feature>());
               }
               unsortedMap.get(feature.getProperties().getNombre()).put(feature.getProperties().getNombre(), feature);
-            } else if (("seccion").equals(urlOrder.toLowerCase())) {
+            } else if ((Constants.DATASET_SECCION).equals(urlOrder.toLowerCase())) {
               if (!unsortedMap.containsKey(feature.getProperties().getSeccion())) {
                 unsortedMap.put(feature.getProperties().getSeccion(), new HashMap<String, Feature>());
               }
               unsortedMap.get(feature.getProperties().getSeccion()).put(feature.getProperties().getNombre(), feature);
-            } else if (("seccion_infantil").equals(urlOrder.toLowerCase())) {
+            } else if ((Constants.DATASET_SECCION_INFANTIL).equals(urlOrder.toLowerCase())) {
               if (!unsortedMap.containsKey(fillWithZeros(feature.getProperties().getSeccionI(),2))) {
                 unsortedMap.put(fillWithZeros(feature.getProperties().getSeccionI(),2), new HashMap<String, Feature>());
               }
@@ -108,7 +109,7 @@ public static boolean checkFilter (final String urlOrder, final String urlParam,
 
   // No feature means the checkFilter is just to check valid orden parameter is passed
   if (feature == null) {
-    if (urlOrder != null && ("nombre".equals(urlOrder) || "seccion".equals(urlOrder) || "seccion_infantil".equals(urlOrder))) {
+    if (urlOrder != null && (Constants.DATASET_NOMBRE.equals(urlOrder) || Constants.DATASET_SECCION.equals(urlOrder) || Constants.DATASET_SECCION_INFANTIL.equals(urlOrder))) {
       result = true;
     }
   
@@ -117,9 +118,9 @@ public static boolean checkFilter (final String urlOrder, final String urlParam,
   } else {
     if ((urlParam == null) ||
         ((urlParam != null) && (
-          ((("nombre").equals(urlOrder.toLowerCase())) && (feature.getProperties().getNombre() != null) && ((feature.getProperties().getNombre().toLowerCase()).contains(urlParam.toLowerCase()))) ||
-          ((("seccion").equals(urlOrder.toLowerCase())) && (feature.getProperties().getSeccion() != null) && ((feature.getProperties().getSeccion().toLowerCase()).contains(urlParam.toLowerCase()))) ||
-          ((("seccion_infantil").equals(urlOrder.toLowerCase())) && (feature.getProperties().getSeccionI() != null) && ((feature.getProperties().getSeccionI().toLowerCase()).contains(urlParam.toLowerCase())))
+          (((Constants.DATASET_NOMBRE).equals(urlOrder.toLowerCase())) && (feature.getProperties().getNombre() != null) && ((feature.getProperties().getNombre().toLowerCase()).contains(urlParam.toLowerCase()))) ||
+          (((Constants.DATASET_SECCION).equals(urlOrder.toLowerCase())) && (feature.getProperties().getSeccion() != null) && ((feature.getProperties().getSeccion().toLowerCase()).contains(urlParam.toLowerCase()))) ||
+          (((Constants.DATASET_SECCION_INFANTIL).equals(urlOrder.toLowerCase())) && (feature.getProperties().getSeccionI() != null) && ((feature.getProperties().getSeccionI().toLowerCase()).contains(urlParam.toLowerCase())))
         ))
       ) {
         result = true;
@@ -134,7 +135,8 @@ public static String readJsonFromUrl(String url) throws IOException {
   try {
     BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
     return readAll(rd);
-  } finally {
+  }
+  finally {
     is.close();
   }
 }

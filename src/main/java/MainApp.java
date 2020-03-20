@@ -43,12 +43,12 @@ public class MainApp {
 			StringWriter writer = new StringWriter();
 			Map<String, Object> root = new HashMap<String, Object>();
 
-			logger.info("Search orden: " + req.queryParams("orden"));
-			logger.info("Search parametro: " + req.queryParams("parametro"));
+			logger.info("Search orden: " + req.queryParams(Constants.URL_PARAMETER_ORDEN));
+			logger.info("Search parametro: " + req.queryParams(Constants.URL_PARAMETER_PARAMETRO));
 
 			try {
-				root.put( "fallasMap", FallasMonumentsJsonParser.getListOfFallas(req.queryParams("orden")!=null?req.queryParams("orden"):null,
-																				 req.queryParams("parametro")!=null?req.queryParams("parametro"):null));
+				root.put( "fallasMap", FallasMonumentsJsonParser.getListOfFallas(req.queryParams(Constants.URL_PARAMETER_ORDEN)!=null?req.queryParams(Constants.URL_PARAMETER_ORDEN):null,
+						req.queryParams(Constants.URL_PARAMETER_PARAMETRO)!=null?req.queryParams(Constants.URL_PARAMETER_PARAMETRO):null));
 				root.put( "jsonData", FallasMonumentsJsonParser.getJsonData());
 																		 
 				resultTemplate.process(root, writer);

@@ -93,7 +93,7 @@ public static Map <String, HashMap<String, Feature>> getListOfFallas(final Strin
     sortedMap = new TreeMap<String, HashMap<String, Feature>>(unsortedMap);
 
     for (Map.Entry<String, HashMap<String, Feature>> entry : sortedMap.entrySet()) {
-      logger.info("- " + entry.getKey() + " -");
+      // logger.info("- " + entry.getKey() + " -");
       sortedMap.replace(entry.getKey(), entry.getValue());
     }
   } catch (Exception e) {
